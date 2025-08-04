@@ -1,0 +1,653 @@
+{% extends "game/layout.html" %} {% load static %} {% block head %}
+<title>Artifactle</title>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Check if daily has been played, initialize variables and local storage
+    if (localStorage.lastDatePlayed !== `{{date}}`) {
+      localStorage.lastDatePlayed = `{{date}}`;
+      let gameState = {
+        round: 1,
+        failCount: 0,
+        score: 0,
+        round1guess1: {
+          countryName: "",
+          distance: "",
+        },
+        round1guess2: {
+          countryName: "",
+          distance: "",
+        },
+        round1guess3: {
+          countryName: "",
+          distance: "",
+        },
+        round1guess4: {
+          countryName: "",
+          distance: "",
+        },
+        round1guess5: {
+          countryName: "",
+          distance: "",
+        },
+        round2guess1: {
+          countryName: "",
+          distance: "",
+        },
+        round2guess2: {
+          countryName: "",
+          distance: "",
+        },
+        round2guess3: {
+          countryName: "",
+          distance: "",
+        },
+        round2guess4: {
+          countryName: "",
+          distance: "",
+        },
+        round2guess5: {
+          countryName: "",
+          distance: "",
+        },
+        round3guess1: {
+          countryName: "",
+          distance: "",
+        },
+        round3guess2: {
+          countryName: "",
+          distance: "",
+        },
+        round3guess3: {
+          countryName: "",
+          distance: "",
+        },
+        round3guess4: {
+          countryName: "",
+          distance: "",
+        },
+        round3guess5: {
+          countryName: "",
+          distance: "",
+        },
+      };
+      localStorage.gameState = JSON.stringify(gameState);
+    }
+    gameState = JSON.parse(localStorage.gameState);
+
+    // Set artifact content based on daily game
+    let artifact1Content = `<div class="image"><img src={{artifact_1.image}}></div><div class="infowrapper"><div class="info"><p><div class="nameredacted">[title redacted]</div><div class="name"><b></b>{{artifact_1.name}}</b></div></p><p></p><div class="yearredacted">[year redacted]</div><div class="year">{{artifact_1.year}}</div><p></p><div class="countryredacted">[country redacted] <--- Guess This!</div><div class="country">{{artifact_1.country}}</div><p></p><div class="materialsredacted">[materials redacted]</div><div class="materials">{{artifact_1.materials}}</div><p></p><div class="descriptionredacted">[description redacted]</div><div class="description">{{artifact_1.description}}</div><p></p></div>`;
+    let artifact2Content = `<div class="image"><img src={{artifact_2.image}}></div><div class="infowrapper"><div class="info"><p><div class="nameredacted">[title redacted]</div><div class="name"><b></b>{{artifact_2.name}}</b></div></p><p></p><div class="yearredacted">[year redacted]</div><div class="year">{{artifact_2.year}}</div><p></p><div class="countryredacted">[country redacted] <--- Guess This!</div><div class="country">{{artifact_2.country}}</div><p></p><div class="materialsredacted">[materials redacted]</div><div class="materials">{{artifact_2.materials}}</div><p></p><div class="descriptionredacted">[description redacted]</div><div class="description">{{artifact_2.description}}</div><p></p></div>`;
+    let artifact3Content = `<div class="image"><img src={{artifact_3.image}}></div><div class="infowrapper"><div class="info"><p><div class="nameredacted">[title redacted]</div><div class="name"><b></b>{{artifact_3.name}}</b></div></p><p></p><div class="yearredacted">[year redacted]</div><div class="year">{{artifact_3.year}}</div><p></p><div class="countryredacted">[country redacted] <--- Guess This!</div><div class="country">{{artifact_3.country}}</div><p></p><div class="materialsredacted">[materials redacted]</div><div class="materials">{{artifact_3.materials}}</div><p></p><div class="descriptionredacted">[description redacted]</div><div class="description">{{artifact_3.description}}</div><p></p></div>`;
+
+    document.querySelector(
+      ".title"
+    ).innerHTML = `<h1>Artifactle {{date}}</h1><p>Artifact ${gameState.round} of 3</p>`;
+
+    // Render current guesses based on game state
+    if (gameState.round === 1) {
+      document.querySelector(".exhibit").innerHTML = `${artifact1Content}`;
+      revealinfoinitial();
+      if (gameState.failCount >= 1) {
+        color = colorcheck(Number(gameState.round1guess1.distance));
+        document.querySelector(".guess1").style.background = `${color}`;
+        document.querySelector(
+          ".guess1"
+        ).innerHTML = `${gameState.round1guess1.countryName}<br>${gameState.round1guess1.distance} km`;
+        document.querySelector(".guess1").style.visibility = "visible";
+      }
+      if (gameState.failCount >= 2) {
+        color = colorcheck(Number(gameState.round1guess2.distance));
+        document.querySelector(".guess2").style.background = `${color}`;
+        document.querySelector(
+          ".guess2"
+        ).innerHTML = `${gameState.round1guess2.countryName}<br>${gameState.round1guess2.distance} km`;
+        document.querySelector(".guess2").style.visibility = "visible";
+      }
+      if (gameState.failCount >= 3) {
+        color = colorcheck(Number(gameState.round1guess3.distance));
+        document.querySelector(".guess3").style.background = `${color}`;
+        document.querySelector(
+          ".guess3"
+        ).innerHTML = `${gameState.round1guess3.countryName}<br>${gameState.round1guess3.distance} km`;
+        document.querySelector(".guess3").style.visibility = "visible";
+      }
+      if (gameState.failCount >= 4) {
+        color = colorcheck(Number(gameState.round1guess4.distance));
+        document.querySelector(".guess4").style.background = `${color}`;
+        document.querySelector(
+          ".guess4"
+        ).innerHTML = `${gameState.round1guess4.countryName}<br>${gameState.round1guess4.distance} km`;
+        document.querySelector(".guess4").style.visibility = "visible";
+      }
+    } else if (gameState.round === 2) {
+      document.querySelector(".exhibit").innerHTML = `${artifact2Content}`;
+      revealinfoinitial();
+      if (gameState.failCount >= 1) {
+        color = colorcheck(Number(gameState.round2guess1.distance));
+        document.querySelector(".guess1").style.background = `${color}`;
+        document.querySelector(
+          ".guess1"
+        ).innerHTML = `${gameState.round2guess1.countryName}<br>${gameState.round2guess1.distance} km`;
+        document.querySelector(".guess1").style.visibility = "visible";
+      }
+      if (gameState.failCount >= 2) {
+        color = colorcheck(Number(gameState.round2guess2.distance));
+        document.querySelector(".guess2").style.background = `${color}`;
+        document.querySelector(
+          ".guess2"
+        ).innerHTML = `${gameState.round2guess2.countryName}<br>${gameState.round2guess2.distance} km`;
+        document.querySelector(".guess2").style.visibility = "visible";
+      }
+      if (gameState.failCount >= 3) {
+        color = colorcheck(Number(gameState.round2guess3.distance));
+        document.querySelector(".guess3").style.background = `${color}`;
+        document.querySelector(
+          ".guess3"
+        ).innerHTML = `${gameState.round2guess3.countryName}<br>${gameState.round2guess3.distance} km`;
+        document.querySelector(".guess3").style.visibility = "visible";
+      }
+      if (gameState.failCount >= 4) {
+        color = colorcheck(Number(gameState.round2guess4.distance));
+        document.querySelector(".guess4").style.background = `${color}`;
+        document.querySelector(
+          ".guess4"
+        ).innerHTML = `${gameState.round2guess4.countryName}<br>${gameState.round2guess4.distance} km`;
+        document.querySelector(".guess4").style.visibility = "visible";
+      }
+    } else if (gameState.round === 3) {
+      document.querySelector(".exhibit").innerHTML = `${artifact3Content}`;
+      revealinfoinitial();
+
+      if (gameState.failCount >= 1) {
+        color = colorcheck(Number(gameState.round3guess1.distance));
+        document.querySelector(".guess1").style.background = `${color}`;
+        document.querySelector(
+          ".guess1"
+        ).innerHTML = `${gameState.round3guess1.countryName}<br>${gameState.round3guess1.distance} km`;
+        document.querySelector(".guess1").style.visibility = "visible";
+      }
+      if (gameState.failCount >= 2) {
+        color = colorcheck(Number(gameState.round3guess2.distance));
+        document.querySelector(".guess2").style.background = `${color}`;
+        document.querySelector(
+          ".guess2"
+        ).innerHTML = `${gameState.round3guess2.countryName}<br>${gameState.round3guess2.distance} km`;
+        document.querySelector(".guess2").style.visibility = "visible";
+      }
+      if (gameState.failCount >= 3) {
+        color = colorcheck(Number(gameState.round3guess3.distance));
+        document.querySelector(".guess3").style.background = `${color}`;
+        document.querySelector(
+          ".guess3"
+        ).innerHTML = `${gameState.round3guess3.countryName}<br>${gameState.round3guess3.distance} km`;
+        document.querySelector(".guess3").style.visibility = "visible";
+      }
+      if (gameState.failCount >= 4) {
+        color = colorcheck(Number(gameState.round3guess4.distance));
+        document.querySelector(".guess4").style.background = `${color}`;
+        document.querySelector(
+          ".guess4"
+        ).innerHTML = `${gameState.round3guess4.countryName}<br>${gameState.round3guess4.distance} km`;
+        document.querySelector(".guess4").style.visibility = "visible";
+      }
+    } else if (gameState.round === 4) {
+      document.querySelector(
+        ".title"
+      ).innerHTML = `<h1>Artifactle {{date}}</h1><p>Exhibit Completed!</p>`;
+      document.querySelector(
+        ".exhibit"
+      ).innerHTML = `<div class="score">You have scored ${gameState.score} / 3 points for today's game!<br>Come back tomorrow for another game!</div>`;
+      document.querySelector(".formvisibility").style.display = "none";
+    }
+
+    // Create variables for correct country id's, latitudes, and longitudes
+    let artifact_1_country = `{{artifact_1.country.code}}`;
+    let artifact_2_country = `{{artifact_2.country.code}}`;
+    let artifact_3_country = `{{artifact_3.country.code}}`;
+
+    let realLatitude1 = `{{artifact_1.country.latitude}}`;
+    let realLongitude1 = `{{artifact_1.country.longitude}}`;
+    let realLatitude2 = `{{artifact_2.country.latitude}}`;
+    let realLongitude2 = `{{artifact_2.country.longitude}}`;
+    let realLatitude3 = `{{artifact_3.country.latitude}}`;
+    let realLongitude3 = `{{artifact_3.country.longitude}}`;
+
+    // Haversine formula to calculate distance in km between two sets of latitudes and longitudes
+    function distance(lat1Deg, lon1Deg, lat2Deg, lon2Deg) {
+      function toRad(degree) {
+        return (degree * Math.PI) / 180;
+      }
+      const lat1 = toRad(lat1Deg);
+      const lon1 = toRad(lon1Deg);
+      const lat2 = toRad(lat2Deg);
+      const lon2 = toRad(lon2Deg);
+      const { sin, cos, sqrt, atan2 } = Math;
+      const R = 6371; // earth radius in km
+      const dLat = lat2 - lat1;
+      const dLon = lon2 - lon1;
+      const a =
+        sin(dLat / 2) * sin(dLat / 2) +
+        cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
+      const c = 2 * atan2(sqrt(a), sqrt(1 - a));
+      const d = R * c;
+      return d; // distance in km
+    }
+
+    // Correct country guess behavior
+    function correctguess(countryGuessName) {
+      document.querySelector(".formvisibility").style.display = "none";
+      document.querySelector(".buttonvisibility").style.display = "inline";
+      revealinfoall();
+      gameState.round++;
+      gameState.failCount = 0;
+      gameState.score++;
+      localStorage.gameState = JSON.stringify(gameState);
+      return false;
+    }
+
+    // Incorrect country guess behavior
+    function incorrectguess(countryGuessName) {
+      gameState.failCount++;
+      localStorage.gameState = JSON.stringify(gameState);
+    }
+
+    // Incorrect country guess #5 behavior
+    function incorrectguessfinal(countryGuessName) {
+      document.querySelector(".formvisibility").style.display = "none";
+      document.querySelector(".buttonvisibility").style.display = "inline";
+      document.querySelector(".country").style.opacity = "1";
+      document.querySelector(".countryredacted").style.visibility = "hidden";
+      gameState.round++;
+      gameState.failCount = 0;
+      localStorage.gameState = JSON.stringify(gameState);
+    }
+
+    // Reset guesses and make them invisible
+    function resetguessdisplay() {
+      document.querySelector(".guess1").style.background = `white`;
+      document.querySelector(".guess2").style.background = `white`;
+      document.querySelector(".guess3").style.background = `white`;
+      document.querySelector(".guess4").style.background = `white`;
+      document.querySelector(".guess5").style.background = `white`;
+      document.querySelector(".guess1").innerHTML = "";
+      document.querySelector(".guess2").innerHTML = "";
+      document.querySelector(".guess3").innerHTML = "";
+      document.querySelector(".guess4").innerHTML = "";
+      document.querySelector(".guess5").innerHTML = "";
+      document.querySelector(".guess1").style.visibility = "hidden";
+      document.querySelector(".guess2").style.visibility = "hidden";
+      document.querySelector(".guess3").style.visibility = "hidden";
+      document.querySelector(".guess4").style.visibility = "hidden";
+      document.querySelector(".guess5").style.visibility = "hidden";
+    }
+
+    // Next round button click behavior
+    document.getElementById("nextroundbutton").onclick = () => {
+      resetguessdisplay();
+      if (gameState.round === 2) {
+        document.querySelector(".exhibit").innerHTML = artifact2Content;
+        document.querySelector(".formvisibility").style.display = "inline";
+        document.querySelector(".buttonvisibility").style.display = "none";
+        document.querySelector(
+          ".title"
+        ).innerHTML = `<h1>Artifactle {{date}}</h1>
+                    <p>Artifact ${gameState.round} of 3</p>`;
+      } else if (gameState.round === 3) {
+        document.querySelector(".exhibit").innerHTML = artifact3Content;
+        document.querySelector(".formvisibility").style.display = "inline";
+        document.querySelector(".buttonvisibility").style.display = "none";
+        document.querySelector(
+          ".title"
+        ).innerHTML = `<h1>Artifactle {{date}}</h1>
+                    <p>Artifact ${gameState.round} of 3</p>`;
+      } else if (gameState.round === 4) {
+        document.querySelector(".buttonvisibility").style.display = "none";
+        document.querySelector(
+          ".title"
+        ).innerHTML = `<h1>Artifactle {{date}}</h1>
+                    <p>Exhibit Completed</p>`;
+        document.querySelector(
+          ".exhibit"
+        ).innerHTML = `<div class="score">You have scored ${gameState.score} / 3 points for today's game!<br>Come back tomorrow for another game!</div>`;
+      }
+    };
+
+    // Reveal info on country guess
+    function revealinfo() {
+      if (gameState.failCount === 1) {
+        document.querySelector(".name").style.opacity = "1";
+        document.querySelector(".nameredacted").style.visibility = "hidden";
+      } else if (gameState.failCount === 2) {
+        document.querySelector(".materials").style.opacity = "1";
+        document.querySelector(".materialsredacted").style.visibility =
+          "hidden";
+      } else if (gameState.failCount === 3) {
+        document.querySelector(".year").style.opacity = "1";
+        document.querySelector(".yearredacted").style.visibility = "hidden";
+      } else if (gameState.failCount === 4) {
+        document.querySelector(".description").style.opacity = "1";
+        document.querySelector(".descriptionredacted").style.visibility =
+          "hidden";
+      } else if (gameState.failCount === 5) {
+        document.querySelector(".country").style.opacity = "1";
+        document.querySelector(".countryredacted").style.visibility = "hidden";
+      }
+    }
+
+    // Reveal info on page load
+    function revealinfoinitial() {
+      if (gameState.failCount >= 1) {
+        document.querySelector(".name").style.opacity = "1";
+        document.querySelector(".nameredacted").style.visibility = "hidden";
+      }
+      if (gameState.failCount >= 2) {
+        document.querySelector(".materials").style.opacity = "1";
+        document.querySelector(".materialsredacted").style.visibility =
+          "hidden";
+      }
+      if (gameState.failCount >= 3) {
+        document.querySelector(".year").style.opacity = "1";
+        document.querySelector(".yearredacted").style.visibility = "hidden";
+      }
+      if (gameState.failCount === 4) {
+        document.querySelector(".description").style.opacity = "1";
+        document.querySelector(".descriptionredacted").style.visibility =
+          "hidden";
+      }
+    }
+
+    // Reveal all info on early correct guess
+    function revealinfoall() {
+      document.querySelector(".name").style.opacity = "1";
+      document.querySelector(".nameredacted").style.visibility = "hidden";
+      document.querySelector(".materials").style.opacity = "1";
+      document.querySelector(".materialsredacted").style.visibility = "hidden";
+      document.querySelector(".year").style.opacity = "1";
+      document.querySelector(".yearredacted").style.visibility = "hidden";
+      document.querySelector(".description").style.opacity = "1";
+      document.querySelector(".descriptionredacted").style.visibility =
+        "hidden";
+      document.querySelector(".country").style.opacity = "1";
+      document.querySelector(".countryredacted").style.visibility = "hidden";
+    }
+
+    // Check distance between guess and correct answer, then return color
+    function colorcheck(countryGuessDistance) {
+      if (countryGuessDistance === 0) {
+        return "green";
+      } else if (countryGuessDistance <= 2000) {
+        return "yellow";
+      } else if (countryGuessDistance <= 6000) {
+        return "orange";
+      } else {
+        return "red";
+      }
+    }
+
+    // Record guess to game state and display guess
+    function recordguess(countryGuessName, countryGuessDistance) {
+      if (gameState.round === 1) {
+        if (gameState.failCount === 0) {
+          gameState.round1guess1.countryName = countryGuessName;
+          gameState.round1guess1.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess1"
+          ).innerHTML = `${gameState.round1guess1.countryName}<br>${gameState.round1guess1.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess1").style.background = `${color}`;
+          document.querySelector(".guess1").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        } else if (gameState.failCount === 1) {
+          gameState.round1guess2.countryName = countryGuessName;
+          gameState.round1guess2.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess2"
+          ).innerHTML = `${gameState.round1guess2.countryName}<br>${gameState.round1guess2.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess2").style.background = `${color}`;
+          document.querySelector(".guess2").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        } else if (gameState.failCount === 2) {
+          gameState.round1guess3.countryName = countryGuessName;
+          gameState.round1guess3.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess3"
+          ).innerHTML = `${gameState.round1guess3.countryName}<br>${gameState.round1guess3.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess3").style.background = `${color}`;
+          document.querySelector(".guess3").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        } else if (gameState.failCount === 3) {
+          gameState.round1guess4.countryName = countryGuessName;
+          gameState.round1guess4.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess4"
+          ).innerHTML = `${gameState.round1guess4.countryName}<br>${gameState.round1guess4.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess4").style.background = `${color}`;
+          document.querySelector(".guess4").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        } else if (gameState.failCount === 4) {
+          gameState.round1guess5.countryName = countryGuessName;
+          gameState.round1guess5.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess5"
+          ).innerHTML = `${gameState.round1guess5.countryName}<br>${gameState.round1guess5.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess5").style.background = `${color}`;
+          document.querySelector(".guess5").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        }
+      } else if (gameState.round === 2) {
+        if (gameState.failCount === 0) {
+          gameState.round2guess1.countryName = countryGuessName;
+          gameState.round2guess1.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess1"
+          ).innerHTML = `${gameState.round2guess1.countryName}<br>${gameState.round2guess1.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess1").style.background = `${color}`;
+          document.querySelector(".guess1").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        } else if (gameState.failCount === 1) {
+          gameState.round2guess2.countryName = countryGuessName;
+          gameState.round2guess2.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess2"
+          ).innerHTML = `${gameState.round2guess2.countryName}<br>${gameState.round2guess2.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess2").style.background = `${color}`;
+          document.querySelector(".guess2").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        } else if (gameState.failCount === 2) {
+          gameState.round2guess3.countryName = countryGuessName;
+          gameState.round2guess3.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess3"
+          ).innerHTML = `${gameState.round2guess3.countryName}<br>${gameState.round2guess3.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess3").style.background = `${color}`;
+          document.querySelector(".guess3").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        } else if (gameState.failCount === 3) {
+          gameState.round2guess4.countryName = countryGuessName;
+          gameState.round2guess4.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess4"
+          ).innerHTML = `${gameState.round2guess4.countryName}<br>${gameState.round2guess4.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess4").style.background = `${color}`;
+          document.querySelector(".guess4").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        } else if (gameState.failCount === 4) {
+          gameState.round2guess5.countryName = countryGuessName;
+          gameState.round2guess5.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess5"
+          ).innerHTML = `${gameState.round2guess5.countryName}<br>${gameState.round2guess5.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess5").style.background = `${color}`;
+          document.querySelector(".guess5").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        }
+      } else if (gameState.round === 3) {
+        if (gameState.failCount === 0) {
+          gameState.round3guess1.countryName = countryGuessName;
+          gameState.round3guess1.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess1"
+          ).innerHTML = `${gameState.round3guess1.countryName}<br>${gameState.round3guess1.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess1").style.background = `${color}`;
+          document.querySelector(".guess1").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        } else if (gameState.failCount === 1) {
+          gameState.round3guess2.countryName = countryGuessName;
+          gameState.round3guess2.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess2"
+          ).innerHTML = `${gameState.round3guess2.countryName}<br>${gameState.round3guess2.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess2").style.background = `${color}`;
+          document.querySelector(".guess2").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        } else if (gameState.failCount === 2) {
+          gameState.round3guess3.countryName = countryGuessName;
+          gameState.round3guess3.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess3"
+          ).innerHTML = `${gameState.round3guess3.countryName}<br>${gameState.round3guess3.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess3").style.background = `${color}`;
+          document.querySelector(".guess3").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        } else if (gameState.failCount === 3) {
+          gameState.round3guess4.countryName = countryGuessName;
+          gameState.round3guess4.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess4"
+          ).innerHTML = `${gameState.round3guess4.countryName}<br>${gameState.round3guess4.distance} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(".guess4").style.background = `${color}`;
+          document.querySelector(".guess4").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        } else if (gameState.failCount === 4) {
+          gameState.round3guess5.countryName = countryGuessName;
+          gameState.round3guess5.distance = countryGuessDistance;
+          document.querySelector(
+            ".guess5"
+          ).innerHTML = `${gameState.round3guess5.countryName}<br>${gameState.round3guess5dis} km`;
+          color = colorcheck(countryGuessDistance);
+          document.querySelector(`.guess5`).style.background = `${color}`;
+          document.querySelector(".guess5").style.visibility = `visible`;
+          localStorage.gameState = JSON.stringify(gameState);
+        }
+      }
+    }
+
+    // Check for correct match and use corresponding function to record result
+    document.querySelector("form").onsubmit = () => {
+      let countryGuess = document.querySelector(".countrySelector").value;
+      let countryGuessName = document.querySelector(`#${countryGuess}`).dataset
+        .name;
+      let countryGuessLatitude = document.querySelector(`#${countryGuess}`)
+        .dataset.latitude;
+      let countryGuessLongitude = document.querySelector(`#${countryGuess}`)
+        .dataset.longitude;
+      if (gameState.round === 1) {
+        let countryGuessDistance = Math.round(
+          distance(
+            realLatitude1,
+            realLongitude1,
+            countryGuessLatitude,
+            countryGuessLongitude
+          )
+        );
+        recordguess(countryGuessName, countryGuessDistance);
+        if (countryGuess === artifact_1_country) {
+          correctguess(countryGuessName);
+        } else if (gameState.failCount < 4) {
+          incorrectguess(countryGuessName);
+          revealinfo();
+        } else {
+          incorrectguessfinal();
+        }
+        return false;
+      } else if (gameState.round === 2) {
+        let countryGuessDistance = Math.round(
+          distance(
+            realLatitude2,
+            realLongitude2,
+            countryGuessLatitude,
+            countryGuessLongitude
+          )
+        );
+        recordguess(countryGuessName, countryGuessDistance);
+        if (countryGuess === artifact_2_country) {
+          correctguess(countryGuessName);
+        } else if (gameState.failCount < 4) {
+          incorrectguess(countryGuessName);
+          revealinfo();
+        } else {
+          incorrectguessfinal();
+        }
+        return false;
+      } else if (gameState.round === 3) {
+        let countryGuessDistance = Math.round(
+          distance(
+            realLatitude3,
+            realLongitude3,
+            countryGuessLatitude,
+            countryGuessLongitude
+          )
+        );
+        recordguess(countryGuessName, countryGuessDistance);
+        if (countryGuess === artifact_3_country) {
+          correctguess(countryGuessName);
+        } else if (gameState.failCount < 4) {
+          incorrectguess(countryGuessName);
+          revealinfo();
+        } else {
+          incorrectguessfinal();
+        }
+        return false;
+      }
+      return false;
+    };
+  });
+</script>
+{% endblock %} {% block body %}
+<div class="wrapper1">
+  <div class="title"></div>
+  <div class="exhibit"></div>
+  <div class="nextround">
+    <div class="buttonvisibility">
+      <button id="nextroundbutton">Next Artifact</button>
+    </div>
+    <form class="formvisibility">
+      {% csrf_token %}
+      <select class="countrySelector">
+        {% for country in countries %}
+        <option
+          id="{{country.code}}"
+          data-latitude="{{country.latitude}}"
+          data-longitude="{{country.longitude}}"
+          data-name="{{country.name}}"
+          value="{{country.code}}"
+        >
+          {{country.name}}
+        </option>
+        {% endfor %}
+      </select>
+      <input type="submit" value="Submit" />
+    </form>
+  </div>
+  <div class="guesses">
+    <div class="guess guess1">Guess 1<br />Distance 1</div>
+    <div class="guess guess2">Guess 2<br />Distance 2</div>
+    <div class="guess guess3">Guess 3<br />Distance 3</div>
+    <div class="guess guess4">Guess 4<br />Distance 4</div>
+    <div class="guess guess5">Guess 5<br />Distance 5</div>
+  </div>
+</div>
+{% endblock %}

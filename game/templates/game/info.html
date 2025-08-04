@@ -1,0 +1,32 @@
+{% extends "game/layout.html" %}
+{% block head %}
+    <title>Artifactle - Info</title>
+{% endblock %}
+            
+{% block body %}
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{% url 'index' %}">Artifactle</a>
+            </div>
+            <ul class="nav navbar-nav">
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="{% url 'register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="wrapper1">
+        <h1 style="text-align:center;">Met Museum Artifact Scraper</h1>
+        <div class="newwrapper" style="font-size:120%;">
+            Jorden Knock<br>
+            GitHub username: Solipses1<br>
+            edX username: Solipses<br>
+            City: Hutchinson, MN<br>
+            Country: USA<br>
+            Date Recorded: 7 / 4 / 2025 <br>
+        </div>
+    </div>
+{% endblock %}
