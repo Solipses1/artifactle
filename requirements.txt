@@ -1,4 +1,4 @@
 django
 datetime
 pillow
-psycopg
+psycopg2-binary
