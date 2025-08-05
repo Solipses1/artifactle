@@ -2,4 +2,3 @@ django
 datetime
 pillow
 psycopg
-psycopg2
