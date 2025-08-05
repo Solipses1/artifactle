@@ -2,25 +2,171 @@
 
 <!DOCTYPE html>
 <html lange="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        {% block head %}
-        {% endblock %}
+    {% block head %} {% endblock %}
 
-         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <!-- jQuery library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
-        <link href="{% static '/styles.css' %}" rel="stylesheet">
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="{% static '/styles.css' %}" rel="stylesheet" />
+    <style>
+      @font-face {
+        font-family: "AvenirLight";
+        src: url(fonts/AvenirLTStd-Light.otf) format("opentype");
+      }
 
-        
-    </head>
-    <body>
-        {% block body %}
-        {% endblock %}
-    </body>
+      @font-face {
+        font-family: "AvenirHeavy";
+        src: url(fonts/AvenirLTStd-Heavy.otf) format("opentype");
+      }
+
+      h1 {
+        font-size: 200;
+      }
+
+      body {
+        background-color: darkgray;
+      }
+
+      img {
+        width: auto;
+        height: 500px;
+      }
+
+      .wrapper1 {
+        font-family: "AvenirLight", sans-serif;
+        margin: auto;
+        width: 80%;
+        height: 100vh;
+        padding: 20px;
+        background-color: rgb(248, 248, 248);
+      }
+
+      .title {
+        text-align: center;
+      }
+
+      .image {
+        text-align: center;
+        width: 45%;
+        margin-right: auto;
+      }
+
+      .info {
+        text-align: left;
+        width: auto;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid;
+        box-shadow: 2px 2px 4px;
+      }
+
+      .exhibit {
+        display: flex;
+      }
+
+      .score {
+        text-align: center;
+        padding: 200px;
+        margin: auto;
+        scale: 150%;
+      }
+
+      .infowrapper {
+        display: inline;
+        margin: auto;
+        padding: 20px;
+        width: 65%;
+      }
+
+      .nextround {
+        text-align: center;
+        padding: 20px;
+      }
+
+      .buttonvisibility {
+        display: none;
+      }
+
+      .nameredacted {
+        font-family: "AvenirHeavy", sans-serif;
+        font-size: 150%;
+        z-index: 10;
+        position: absolute;
+      }
+
+      .yearredacted {
+        z-index: 10;
+        position: absolute;
+      }
+
+      .countryredacted {
+        z-index: 10;
+        position: absolute;
+      }
+
+      .materialsredacted {
+        z-index: 10;
+        position: absolute;
+      }
+
+      .descriptionredacted {
+        z-index: 10;
+        position: absolute;
+      }
+
+      .name {
+        font-family: "AvenirHeavy", sans-serif;
+        font-size: 150%;
+        opacity: 0;
+        transition: opacity 3s;
+      }
+
+      .year {
+        opacity: 0;
+        transition: opacity 3s;
+      }
+
+      .country {
+        opacity: 0;
+        transition: opacity 3s;
+      }
+
+      .materials {
+        opacity: 0;
+        transition: opacity 3s;
+      }
+
+      .description {
+        opacity: 0;
+        transition: opacity 3s;
+      }
+
+      .guesses {
+        display: flex;
+      }
+
+      .guess {
+        display: inline-flex;
+        margin: auto;
+        padding: 5px;
+        border: 1px solid;
+        box-shadow: 1px 1px 2px;
+        text-align: center;
+        visibility: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    {% block body %} {% endblock %}
+  </body>
 </html>
