@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-r!%(m5m-t104&eyopaqb5^nfr1c9#92(9r3m*q^jf%$t64339a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app', '.now.sh']
 
 
 # Application definition
@@ -74,9 +74,17 @@ WSGI_APPLICATION = 'artifactle.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    #'default': {
+    #    'ENGINE': 'django.db.backends.sqlite3',
+    #    'NAME': BASE_DIR / 'db.sqlite3',
+    #}
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "neondb",
+        "USER": "neondb_owner",
+        "PASSWORD": "npg_8c6fHjGybOkM",
+        "HOST": "ep-wispy-base-ady08y2a-pooler.c-2.us-east-1.aws.neon.tech",
+        "PORT": "",
     }
 }
 
@@ -122,3 +130,6 @@ MEDIA_URL = ''
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATICFILES_DIRS = [BASE_DIR/'static',]
+STATIC_ROOT = BASE_DIR/'staticfiles'
