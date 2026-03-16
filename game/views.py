@@ -18,6 +18,7 @@ def index(request):
         "artifact_1": game.round_1,
         "artifact_2": game.round_2,
         "artifact_3": game.round_3,
+        "current_date": current_date,
     })
 
 def register(request):

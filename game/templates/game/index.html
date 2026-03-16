@@ -81,7 +81,7 @@
 
     document.querySelector(
       ".title"
-    ).innerHTML = `<h1>Artifactle {{date}}</h1><p>Artifact ${gameState.round} of 3</p>`;
+    ).innerHTML = `<h1>Artifactle {{current_date}}</h1><p>Artifact ${gameState.round} of 3</p>`;
 
     // Render current guesses based on game state
     if (gameState.round === 1) {
